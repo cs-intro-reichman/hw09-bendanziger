@@ -33,19 +33,61 @@ public class LanguageModel {
 
     /** Builds a language model from the text in the given file (the corpus). */
 	public void train(String fileName) {
-		// Your code goes here
-	}
+    String window = "";
+    char c;
+    In in = new In(fileName);
+    for (int i = 0; i < windowLength; i++){
+        window += in.readChar();
+    }
+    while (!in.isEmpty()) {
+    c = in.readChar();
+    List probs = CharDataMap.get(window);
+    if(probs == null){
+     probs = new List();
+     CharDataMap.put(window, probs);
+     
+    }
+    probs.update(c);
+    window = window.substring(1) + c;
+    }
+     for (List probs : CharDataMap.values()) {
+        calculateProbabilities(probs);
+    }
+    }
 
     // Computes and sets the probabilities (p and cp fields) of all the
 	// characters in the given list. */
 	void calculateProbabilities(List probs) {				
-		// Your code goes here
-	}
+    int totalcount = 0;
+    ListIterator it = probs.listIterator(0);
+    while (it.hasNext()) {
+        CharData current =  it.next();
+        totalcount += current.count;
+    }
+    double cpcalc = 0.0;
+    it = probs.listIterator(0);
+    while (it.hasNext()) {
+     CharData current =  it.next();
+     current.p = (double) current.count / totalcount;
+     cpcalc += current.p;
+     current.cp = cpcalc;
+    }
+    
+    }
 
     // Returns a random character from the given probabilities list.
 	char getRandomChar(List probs) {
-		// Your code goes here
-		return ' ';
+    double r = Math.random();
+    ListIterator it = probs.listIterator(0);
+    CharData current = null; 
+    while (it.hasNext()) {
+        current = it.next();
+        if(current.cp > r){
+            return current.chr;
+        }
+    }
+    return current.chr;
+        
 	}
 
     /**
@@ -56,8 +98,22 @@ public class LanguageModel {
 	 * @return the generated text
 	 */
 	public String generate(String initialText, int textLength) {
-		// Your code goes here
-        return "";
+		String generatedText = initialText;
+        if(initialText.length()<windowLength){
+            return null;
+        }
+        String window = initialText.substring(generatedText.length() - windowLength);
+       while (generatedText.length() < textLength) {
+        
+        List probs = CharDataMap.get(window);
+    if(probs == null){
+        return generatedText;
+    }
+    char nextChar = getRandomChar(probs);
+     generatedText += nextChar;
+     window = generatedText.substring(generatedText.length() - windowLength);
+}
+        return generatedText;
 	}
 
     /** Returns a string representing the map of this language model. */
