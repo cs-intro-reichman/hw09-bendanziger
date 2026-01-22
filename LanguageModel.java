@@ -111,9 +111,9 @@ public class LanguageModel {
         
         String generatedText = initialText;
         String window = generatedText.substring(generatedText.length() - windowLength);
-        
+        int targetLength = textLength + initialText.length();
         // Generate characters until the text reaches the requested length
-        while (generatedText.length() < textLength) {
+        while (generatedText.length() < targetLength) {
             List probs = CharDataMap.get(window);
             
             // If the current window is not found in the map, stop and return what we have
