@@ -44,7 +44,7 @@ public class List {
     Node current = first;
     
     while (current != null) {
-        str += current; 
+        str += current.cp.toString(); 
         if (current.next != null) {
             str += " ";
         }
@@ -61,7 +61,7 @@ public class List {
         int i = 0;
         Node current = this.first;
         while(current!=null){
-        if(current.cp.equals(chr))
+        if(current.cp.chr == chr)
             return i;
 
         i++;

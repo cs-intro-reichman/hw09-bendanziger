@@ -100,10 +100,11 @@ public class LanguageModel {
 	public String generate(String initialText, int textLength) {
 		String generatedText = initialText;
         if(initialText.length()<windowLength){
-            return null;
+            return initialText;
         }
         String window = initialText.substring(generatedText.length() - windowLength);
-       while (generatedText.length() < textLength) {
+        int totalTargetLength = textLength + initialText.length();
+       while (generatedText.length() < totalTargetLength) {
         
         List probs = CharDataMap.get(window);
     if(probs == null){
@@ -127,6 +128,5 @@ public class LanguageModel {
 	}
 
     public static void main(String[] args) {
-		// Your code goes here
-    }
+    
 }
