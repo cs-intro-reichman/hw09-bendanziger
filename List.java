@@ -78,7 +78,7 @@ public class List {
         get(indexOf(chr)).count++;
     }
     else{
-
+    addFirst(chr);
     }
     }
 
@@ -88,14 +88,16 @@ public class List {
     public boolean remove(char chr) {
      Node current = first;
      if (first == null) return false; 
-     if(current.cp.equals(chr)){
+     if(first.cp.chr == chr){
         this.first = first.next;
+        size--;
         return true;
      }
     while (current.next != null) {       
-    if(current.next.cp.equals(chr))
+    if(current.next.cp.chr == chr)
     {
     current.next = current.next.next;
+    size--;
     return true;
     }
     current = current.next;
@@ -137,11 +139,11 @@ public class List {
     /** Returns an iterator over the elements in this list, starting at the given index. */
     public ListIterator listIterator(int index) {
 	    // If the list is empty, there is nothing to iterate   
-	    if (size == 0) return null;
+	    if (size == 0) return new ListIterator(null);
 	    // Gets the element in position index of this list
 	    Node current = first;
 	    int i = 0;
-        while (i < index) {
+        while (i < index && current != null) {
             current = current.next;
             i++;
         }
